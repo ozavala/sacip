@@ -11,7 +11,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Registrar rutas de cada módulo
+        $this->registerModuleRoutes();
+    }
+
+    protected function registerModuleRoutes(): void
+    {
+        foreach (glob(app_path('Modules/*/routes.php')) as $routeFile)
+            {
+                require $routeFile;
+            }
     }
 
     /**
@@ -19,6 +28,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Registrar migraciones de los módulos
+        $this->loadMigrationsFrom([
+            app_path('Modules/CRM/database/migrations'),
+            // Agrega más rutas si tienes otros módulos
+        ]);
     }
 }
